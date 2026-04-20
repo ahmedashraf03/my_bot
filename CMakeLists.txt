@@ -39,6 +39,8 @@ install(
 
 install(PROGRAMS
   scripts/coverage_planner.py
+  scripts/robot_supervisor.py
+  scripts/frontier_explorer.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
