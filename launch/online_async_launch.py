@@ -31,7 +31,8 @@ def generate_launch_description():
         name='slam_toolbox',
         output='screen',
         remappings=[
-            ('/odom', '/diff_cont/odom')  # ← Add this line
+            ('/odom', '/diff_cont/odom'),
+            ('/scan', '/scan')  # ← Add this line
         ]
     )
 
