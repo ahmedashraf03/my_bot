@@ -25,11 +25,11 @@ def generate_launch_description():
                 )]), launch_arguments={'use_sim_time': 'true', 'use_ros2_control': 'true'}.items()
     )
 
-    joystick = IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([os.path.join(
-                    get_package_share_directory(package_name),'launch','joystick.launch.py'
-                )]), launch_arguments={'use_sim_time': 'true'}.items()
-    )
+    # joystick = IncludeLaunchDescription(
+    #             PythonLaunchDescriptionSource([os.path.join(
+    #                 get_package_share_directory(package_name),'launch','joystick.launch.py'
+    #             )]), launch_arguments={'use_sim_time': 'true'}.items()
+    # )
 
     twist_mux_params = os.path.join(get_package_share_directory(package_name),'config','twist_mux.yaml')
     twist_mux = Node(
@@ -67,25 +67,25 @@ def generate_launch_description():
         arguments=["joint_broad"],
     )
 
-    # IMU Filter
-    imu_filter_config = os.path.join(get_package_share_directory(package_name),'config','imu_params.yaml')
-    imu_filter = Node(
-        package='imu_filter_madgwick',
-        executable='imu_filter_madgwick_node',
-        name='imu_filter',
-        parameters=[imu_filter_config],
-        output='screen'
-    )
+    # # IMU Filter
+    # imu_filter_config = os.path.join(get_package_share_directory(package_name),'config','imu_params.yaml')
+    # imu_filter = Node(
+    #     package='imu_filter_madgwick',
+    #     executable='imu_filter_madgwick_node',
+    #     name='imu_filter',
+    #     parameters=[imu_filter_config],
+    #     output='screen'
+    # )
 
-    # EKF
-    ekf_config = os.path.join(get_package_share_directory(package_name),'config','ekf_params.yaml')
-    ekf = Node(
-        package='robot_localization',
-        executable='ekf_node',
-        name='ekf_filter_node',
-        parameters=[ekf_config],
-        output='screen'
-    )
+    # # EKF
+    # ekf_config = os.path.join(get_package_share_directory(package_name),'config','ekf_params.yaml')
+    # ekf = Node(
+    #     package='robot_localization',
+    #     executable='ekf_node',
+    #     name='ekf_filter_node',
+    #     parameters=[ekf_config],
+    #     output='screen'
+    # )
 
 
     # Code for delaying a node (I haven't tested how effective it is)
@@ -114,7 +114,7 @@ def generate_launch_description():
         gazebo,
         spawn_entity,
         diff_drive_spawner,
-        joint_broad_spawner,
-        imu_filter,
-        ekf
+        joint_broad_spawner
+        # imu_filter,
+        # ekf
     ])
