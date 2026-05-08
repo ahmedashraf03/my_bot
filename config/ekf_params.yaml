@@ -23,6 +23,7 @@ robot_localization:
     imu0_queue_size: 10
     
     # Output
+    map_frame: map
     odom_frame: odom
     base_link_frame: base_footprint
     world_frame: odom
