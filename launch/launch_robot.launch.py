@@ -104,6 +104,49 @@ def generate_launch_description():
         )
     )
 
+# IMU Sensor Broadcaster Spawner Node (The added piece)
+    imu_broadcaster_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["imu_sensor_broadcaster"],
+    )
+
+    delayed_imu_broadcaster_spawner = RegisterEventHandler(
+        event_handler=OnProcessStart(
+            target_action=controller_manager,
+            on_start=[imu_broadcaster_spawner],
+        )
+    )
+
+
+    # IMU Filter
+    imu_filter_config = os.path.join(get_package_share_directory(package_name),'config','imu_params.yaml')
+    imu_filter = Node(
+        package='imu_filter_madgwick',
+        executable='imu_filter_madgwick_node',
+        name='imu_filter',
+        output='screen',
+        parameters=[{
+            'use_mag': False,       # Forces the filter to run without a compass
+            'publish_tf': False,
+            'fixed_frame': 'base_link'
+        }],
+        remappings=[
+            ('/imu/data_raw', '/imu/data_raw'),
+            ('/imu/data', '/imu/data')
+        ]    
+    )
+
+    # EKF
+    ekf_config = os.path.join(get_package_share_directory(package_name),'config','ekf_params.yaml')
+    ekf = Node(
+        package='robot_localization',
+        executable='ekf_node',
+        name='ekf_filter_node',
+        output='screen',
+        parameters=[ekf_config]
+    )
+
 
     # Code for delaying a node (I haven't tested how effective it is)
     # 
@@ -130,5 +173,8 @@ def generate_launch_description():
         twist_mux,
         delayed_controller_manager,
         delayed_diff_drive_spawner,
-        delayed_joint_broad_spawner
+        delayed_joint_broad_spawner,
+        delayed_imu_broadcaster_spawner,  # Spawns IMU broadcaster cleanly
+        imu_filter,
+        TimerAction(period=5.0, actions=[ekf])
     ])

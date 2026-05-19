@@ -1,12 +1,13 @@
-robot_localization:
+ekf_filter_node:
   ros__parameters:
-    frequency: 30.0
+    frequency: 15.0
     sensor_timeout: 0.1
     two_d_mode: true
     transform_time_offset: 0.0
     transform_timeout: 0.0
     print_diagnostics: true
     debug: false
+<<<<<<< HEAD
     
     # Odometry input (wheel encoders)
     odom0: /odom
@@ -23,47 +24,57 @@ robot_localization:
     imu0_queue_size: 10
     
     # Output
+=======
+    publish_tf: true
+    # Frames configuration
+>>>>>>> d89d53d (updating sensor fusion)
     map_frame: map
     odom_frame: odom
-    base_link_frame: base_footprint
+    base_link_frame: base_link
     world_frame: odom
     
-    # Fusion settings
+    # Odometry input (wheel encoders)
+    odom0: /diff_cont/odom
+    odom0_config: [true, true, false, # x, y, z positions
+                   false, false, true,  # roll, pitch, yaw orientations
+                   true,  true, false, # x, y, z velocities
+                   false, false, true,  # roll, pitch, yaw velocities
+                   false, false, false] # x, y, z accelerations
+    odom0_differential: false
+    odom0_queue_size: 10
+    # # Add these to the odom0 section
+    # odom0_pose_rejection_threshold: 5.0
+    # odom0_twist_rejection_threshold: 1.0
+    
+    # IMU input (MPU-6050)
+    imu0: /imu/data
+    imu0_config: [false, false, false,  # x, y, z positions
+                  false, false, false,   # roll, pitch, yaw absolute orientations
+                  false, false, false,  # x, y, z velocities
+                  false, false, true,   # roll, pitch, yaw angular velocities (Gyro)
+                  true, true, false]  # x, y, z linear accelerations
+    imu0_differential: false
+    imu0_queue_size: 10
+    imu0_relative: false
+    # Add these to the imu0 section
+    # imu0_pose_rejection_threshold: 0.8
+    # imu0_twist_rejection_threshold: 0.5
+    
     use_control: false
-    process_noise_covariance:
-      - 0.05  # x
-      - 0.0   # y
-      - 0.0
-      - 0.0
-      - 0.0
-      - 0.0
-      - 0.0   # 
-      - 0.05  # 
-      - 0.0
-      - 0.0
-      - 0.0
-      - 0.0
-      - 0.0
-      - 0.0
-      - 0.06  # 
-      - 0.0
-      - 0.0
-      - 0.0
-      - 0.0
-      - 0.0
-      - 0.0
-      - 0.03  # 
-      - 0.0
-      - 0.0
-      - 0.0
-      - 0.0
-      - 0.0
-      - 0.0
-      - 0.03  # 
-      - 0.0
-      - 0.0
-      - 0.0
-      - 0.0
-      - 0.0
-      - 0.0
-      - 0.0
+
+    # Complete 15x15 Matrix (225 elements)
+    process_noise_covariance: [0.4, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                               0.0,  0.4, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                               0.0,  0.0,  0.06, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                               0.0,  0.0,  0.0,  0.03, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                               0.0,  0.0,  0.0,  0.0,  0.03, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                               0.0,  0.0,  0.0,  0.0,  0.0,  0.3, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                               0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.25,0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                               0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.25,0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                               0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.04, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                               0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.01, 0.0,  0.0,  0.0,  0.0,  0.0,
+                               0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.01, 0.0,  0.0,  0.0,  0.0,
+                               0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.15, 0.0,  0.0,  0.0,
+                               0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.01, 0.0,  0.0,
+                               0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.01, 0.0,
+                               0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.015]
