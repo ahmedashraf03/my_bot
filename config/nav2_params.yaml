@@ -6,7 +6,7 @@ amcl:
     alpha3: 0.4
     alpha4: 0.2
     alpha5: 0.2
-    base_frame_id: "base_link"
+    base_frame_id: "base_footprint"
     beam_skip_distance: 0.5
     beam_skip_error_threshold: 0.9
     beam_skip_threshold: 0.3
@@ -38,14 +38,15 @@ amcl:
     z_rand: 0.5
     z_short: 0.05
     scan_topic: scan
-    odom_topic: "/odometry/filtered"
+    odom_topic: "odom"
+    transform_timeout: 0.5
 
 bt_navigator:
   ros__parameters:
     use_sim_time: True
     global_frame: map
     robot_base_frame: base_link
-    odom_topic: "/odometry/filtered"
+    odom_topic: "odom"
     bt_loop_duration: 10
     default_server_timeout: 20
     wait_for_service_timeout: 1000
@@ -180,7 +181,7 @@ controller_server:
       RotateToGoal.scale: 32.0
       RotateToGoal.slowing_factor: 5.0
       RotateToGoal.lookahead_time: -1.0
-      odom_topic: "/odometry/filtered"
+      odom_topic: "odom"
 
 
 local_costmap:
@@ -190,7 +191,7 @@ local_costmap:
       publish_frequency: 2.0
       global_frame: odom
       robot_base_frame: base_link
-      topic: "/odometry/filtered"
+      topic: "odom"
       use_sim_time: True
       rolling_window: true
       width: 3
