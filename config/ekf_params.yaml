@@ -7,65 +7,51 @@ ekf_filter_node:
     transform_timeout: 0.0
     print_diagnostics: true
     debug: false
-    
-    # Odometry input (wheel encoders)
-    odom0: /odom
-    odom0_config: [true, true, false, false, false, false,
-                   false, false, false, false, false, true]
-    odom0_differential: false
-    odom0_queue_size: 10
-    
-    # IMU input (corrects orientation)
-    imu0: /imu/data
-    imu0_config: [false, false, false, true, true, true,
-                  false, false, false, false, false, false]
-    imu0_differential: true
-    imu0_queue_size: 10
-    
-    # Output
-    map_frame: map
-    odom_frame: odom
-    base_link_frame: base_footprint
-    world_frame: odom
-    
-    # Odometry input (wheel encoders)
+
+    # Odometry input (wheel encoders via diff_drive_controller)
     odom0: /diff_cont/odom
-    odom0_config: [true, true, false, # x, y, z positions
-                   false, false, true,  # roll, pitch, yaw orientations
-                   true,  true, false, # x, y, z velocities
-                   false, false, true,  # roll, pitch, yaw velocities
-                   false, false, false] # x, y, z accelerations
+    odom0_config: [true,  true,  false,  # x, y, z positions
+                   false, false, true,   # roll, pitch, yaw orientations
+                   true,  true,  false,  # x, y, z velocities
+                   false, false, true,   # roll, pitch, yaw velocities
+                   false, false, false]  # x, y, z accelerations
     odom0_differential: false
     odom0_queue_size: 10
-    # # Add these to the odom0 section
     # odom0_pose_rejection_threshold: 5.0
     # odom0_twist_rejection_threshold: 1.0
-    
-    # IMU input (MPU-6050)
+
+    # IMU input (MPU-6050) — provides angular velocity (gyro) and linear acceleration
     imu0: /imu/data
     imu0_config: [false, false, false,  # x, y, z positions
-                  false, false, false,   # roll, pitch, yaw absolute orientations
+                  false, false, false,  # roll, pitch, yaw absolute orientations (not trusted from MPU-6050)
                   false, false, false,  # x, y, z velocities
                   false, false, true,   # roll, pitch, yaw angular velocities (Gyro)
-                  true, true, false]  # x, y, z linear accelerations
+                  true,  true,  false]  # x, y, z linear accelerations
     imu0_differential: false
     imu0_queue_size: 10
     imu0_relative: false
-    # Add these to the imu0 section
     # imu0_pose_rejection_threshold: 0.8
     # imu0_twist_rejection_threshold: 0.5
-    
+
+    # Frame configuration
+    map_frame: map
+    odom_frame: odom
+    base_link_frame: base_link      # Must match your URDF base frame
+    world_frame: odom
+
     use_control: false
 
-    # Complete 15x15 Matrix (225 elements)
-    process_noise_covariance: [0.4, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-                               0.0,  0.4, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+    # Process noise covariance (15x15 matrix)
+    # Lower x,y position noise (0.05) for tighter position tracking
+    # Higher yaw noise (0.3) since MPU-6050 gyro drifts
+    process_noise_covariance: [0.05, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                               0.0,  0.05, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
                                0.0,  0.0,  0.06, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
                                0.0,  0.0,  0.0,  0.03, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
                                0.0,  0.0,  0.0,  0.0,  0.03, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-                               0.0,  0.0,  0.0,  0.0,  0.0,  0.3, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-                               0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.25,0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-                               0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.25,0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                               0.0,  0.0,  0.0,  0.0,  0.0,  0.3,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                               0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.25, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                               0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.25, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
                                0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.04, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
                                0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.01, 0.0,  0.0,  0.0,  0.0,  0.0,
                                0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.01, 0.0,  0.0,  0.0,  0.0,
