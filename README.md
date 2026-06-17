@@ -1,29 +1,25 @@
-Autonomous Mobile Robot Vacuum Cleaner
+# 🤖 Autonomous Mobile Robot Vacuum Cleaner
 
+![ROS2](https://img.shields.io/badge/ROS2-Humble-blue)
+![Platform](https://img.shields.io/badge/Raspberry%20Pi%204-4GB-red)
+![Navigation](https://img.shields.io/badge/Nav2-Enabled-green)
 
+## 📖 Overview
 
-Overview
-This project presents an Autonomous Mobile Robot Vacuum Cleaner developed as a graduation project. The robot is capable of:
+This project presents an autonomous mobile robot vacuum cleaner capable of:
 
-Autonomous SLAM mapping
+- Autonomous SLAM Mapping
+- Localization using AMCL
+- Navigation using Nav2
+- Frontier Exploration
+- Coverage Path Planning
+- EKF Sensor Fusion
+- Obstacle Avoidance
 
-Self-localization using AMCL
+---
 
-Autonomous navigation using Navigation2
-
-Frontier-based exploration
-
-Coverage path planning for systematic cleaning
-
-Real-time obstacle avoidance
-
-EKF sensor fusion
-
-Differential drive motion control
-
-The system is built using ROS2 Humble running on a Raspberry Pi 4 and integrates LiDAR, IMU, wheel encoders, and Arduino-based motor control.
-
-System Architecture
+## 🏗️ System Architecture
+```text
 RPLidar A1
 IMU MPU6050
 Wheel Encoders
@@ -62,50 +58,52 @@ diffdrive_arduino
    L298N
       │
  DC Motors
-Hardware Components
-Component	Description
-Raspberry Pi 4B (4GB)	Main ROS2 controller
-RPLidar A1	360° LiDAR sensor
-Arduino UNO	Low-level motor control
-MPU6050	IMU sensor
-DC Motors with Encoders	Differential drive
-L298N	Motor driver
-Suction Motor	Vacuum cleaning
-Caster Wheel	Passive support wheel
-Software Features
-SLAM Mapping
+```
+## 🔧Hardware Components
+
+```text
+| Component               | Description             |
+| ----------------------- | ----------------------- |
+| Raspberry Pi 4B (4GB)   | Main ROS2 controller    |
+| RPLidar A1              | 360° LiDAR sensor       |
+| Arduino UNO             | Low-level motor control |
+| MPU6050                 | IMU sensor              |
+| DC Motors with Encoders | Differential drive      |
+| L298N                   | Motor driver            |
+| Suction Motor           | Vacuum cleaning         |
+| Caster Wheel            | Passive support wheel   |
+```
+---
+## Software Features
+## SLAM Mapping
 Using SLAM Toolbox to generate occupancy grid maps from LiDAR and odometry.
 
-Localization
-AMCL particle filter estimates robot pose within a pre-built map.
+## Localization
+AMCL particle filter estimates robot pose within a pre-built map.]
 
-Navigation
+## Navigation
 Navigation2 provides:
+  Global path planning
+  Local path planning
+  Obstacle avoidance
+  Costmap generation
 
-Global path planning
-
-Local path planning
-
-Obstacle avoidance
-
-Costmap generation
-
-Frontier Exploration
+## Frontier Exploration
 Automatically discovers unexplored areas and generates exploration goals.
 
-Coverage Planner
+## Coverage Planner
 Generates zig-zag cleaning paths to ensure full floor coverage while minimizing overlap.
 
-Sensor Fusion
-Extended Kalman Filter (EKF) fuses:
-
-Encoder odometry
-
-IMU measurements
-
+## Sensor Fusion
+Extended Kalman Filter (EKF) fuses: 
+  Encoder odometry
+  IMU measurements
 for improved localization accuracy.
 
-Package Structure
+---
+## Package Structure
+
+```text
 my_bot/
 ├── config/          # Nav2, SLAM, EKF and controller parameters
 ├── description/     # URDF/Xacro robot model
@@ -116,47 +114,32 @@ my_bot/
 ├── worlds/          # Gazebo simulation worlds
 ├── package.xml
 └── README.md
-Simulation
-Launch Gazebo:
-
+```
+## Simulation
+## Launch Gazebo:
 ros2 launch my_bot launch_sim.launch.py
-Run SLAM:
 
+## Run SLAM:
 ros2 launch my_bot online_async_launch.py
-Run Localization:
 
+## Run Localization:
 ros2 launch my_bot localization_launch.py
-Run Navigation:
 
+## Run Navigation:
 ros2 launch my_bot navigation_launch.py
-Results
+
+## Run Frontier Explorer
+ros2 run my_bot frontier_explorer.py
+
+## Run Coverage Planner
+ros2 run my_bot coverage_planner.py
+
+## Results
 Autonomous map generation
-
 Accurate localization using AMCL
-
 Obstacle avoidance with Nav2
-
 Autonomous exploration of unknown environments
-
 Full coverage cleaning using zig-zag planning
-
 Successful hardware-software integration
 
-Future Improvements
-Auto docking and charging
 
-Battery monitoring system
-
-MOSFET motor drivers
-
-AI-based dynamic obstacle avoidance
-
-ROS2 cloud monitoring
-
-Team
-Graduation Project 2025/2026
-
-Faculty of Engineering
-Department of Mechatronics & Mechanical Engineering
-
-This README will look much more professional to examiners, recruiters, and anyone visiting your GitHub repository than a generic ROS package README.
