@@ -135,11 +135,12 @@ ros2 run my_bot frontier_explorer.py
 ros2 run my_bot coverage_planner.py
 
 ## Results
+```text
 Autonomous map generation
 Accurate localization using AMCL
 Obstacle avoidance with Nav2
 Autonomous exploration of unknown environments
 Full coverage cleaning using zig-zag planning
 Successful hardware-software integration
-
+```
 
